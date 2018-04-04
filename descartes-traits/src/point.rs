@@ -5,6 +5,9 @@ use ops;
 
 type O<T> = <T as ops::Index<usize>>::Output;
 
+#[allow(dead_code)] // FIXME: is this a rustc bug?
+type V<T> = <T as ::associated::Vector<O<T>>>::Vector;
+
 pub trait Point:
     Copy
     + Clone
@@ -13,7 +16,9 @@ pub trait Point:
     + ops::Index<usize>
     + ops::IndexMut<usize>
     + ::associated::Vector<O<Self>>
-    + ops::Add<<Self as ::associated::Vector<O<Self>>>::Vector>
+    + ops::Add<V<Self>>
+    + ops::Sub<V<Self>>
+    + ops::Sub<Self, Output = V<Self>>
 where
     Self: Sized,
     <Self as ops::Index<usize>>::Output: Real + NumAssign,

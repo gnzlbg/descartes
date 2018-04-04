@@ -88,6 +88,43 @@ GenericArray<E, A>: Copy + Default,
     }
 }
 
+impl<E, A, D> ::ops::Sub<super::V<E,A>> for P<E, A, D>
+    where
+    E: Real + NumAssign + Default,
+    A: ArrayLength<E> + Copy + Default,
+GenericArray<E, A>: Copy + Default,
+    D: Copy + Default,
+{
+    type Output = Self;
+    fn sub(mut self, o: super::V<E,A>) -> Self::Output {
+        use descartes_traits::dimension::Ambient;
+        for i in Self::ambient_dimensions() {
+            self[i] -= o[i];
+        }
+        self
+    }
+}
+
+impl<E, A, D> ::ops::Sub for P<E, A, D>
+    where
+    E: Real + NumAssign + Default,
+    A: ArrayLength<E> + Copy + Default,
+GenericArray<E, A>: Copy + Default,
+    D: Copy + Default,
+{
+    type Output = super::V<E,A>;
+    fn sub(self, o: Self) -> Self::Output {
+        use descartes_traits::Vector;
+        use descartes_traits::dimension::Ambient;
+        let mut v = Self::Output::null();
+        for i in Self::ambient_dimensions() {
+            v[i] = self[i] - o[i];
+        }
+        v
+    }
+}
+
+
 impl<E, A, D> ::descartes_traits::Point for P<E, A, D>
 where
     E: Real + NumAssign + Default,
@@ -118,31 +155,59 @@ mod tests {
     fn point() {
         use descartes_traits::{Vector, Point};
         {  // 1D:
+            let ad = 1;
             let x = P1D::constant(1.);
             let y = V1D::constant(2.);
             let z = x + y;
-            for i in 0..1 {
+            for i in 0..ad {
                 assert_eq!(z[i], 3.);
+            }
+            let z = z - y;
+            for i in 0..ad {
+                assert_eq!(z[i], 1.);
+            }
+            let z = x - x;
+            for i in 0..ad {
+                assert_eq!(z[i], 0.);
             }
         }
 
         {  // 2D:
+            let ad = 2;
             let x = P2D::constant(1.);
             let y = V2D::constant(2.);
             let z = x + y;
-            for i in 0..2 {
+            for i in 0..ad {
                 assert_eq!(z[i], 3.);
             }
+            let z = z - y;
+            for i in 0..ad {
+                assert_eq!(z[i], 1.);
+            }
+            let z = x - x;
+            for i in 0..ad {
+                assert_eq!(z[i], 0.);
+            }
+
         }
 
         {  // 3D:
+            let ad = 3;
             let x = P3D::constant(1.);
             let y = V3D::constant(2.);
             let z = x + y;
-
-            for i in 0..3 {
+            for i in 0..ad {
                 assert_eq!(z[i], 3.);
             }
+            let z = z - y;
+            for i in 0..ad {
+                assert_eq!(z[i], 1.);
+            }
+            let z = x - x;
+            for i in 0..ad {
+                assert_eq!(z[i], 0.);
+            }
+
         }
     }
 }
