@@ -1,0 +1,10 @@
+[package]
+name = "descartes"
+version = "0.1.0"
+authors = ["gnzlbg <gonzalobg88@gmail.com>"]
+
+[dependencies]
+descartes-traits = { version = "0.1.0", path = "../descartes-traits" }
+typenum = "1.10.0"
+generic-array = "0.11.0"
+num-traits = "0.2.*"
