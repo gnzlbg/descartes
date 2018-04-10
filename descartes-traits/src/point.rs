@@ -1,35 +1,30 @@
 //! Point
 
-use num_traits::{NumAssign, Zero, real::Real};
+use num_traits::{real::Real, NumAssign, Zero};
 use ops;
 
-type O<T> = <T as ops::Index<usize>>::Output;
-
-#[allow(dead_code)] // FIXME: is this a rustc bug?
-type V<T> = <T as ::associated::Vector<O<T>>>::Vector;
+type E<T> = <T as ::associated::Number>::Number;
+type V<T> = <T as ::associated::Vector>::Vector;
 
 pub trait Point:
     Copy
     + Clone
     + ::dimension::Ambient
     + ::dimension::Object<OD = <Self as ::dimension::Ambient>::AD>
-    + ops::Index<usize>
+    + ::associated::Vector
+    + ops::Index<usize, Output = E<Self>>
     + ops::IndexMut<usize>
-    + ::associated::Vector<O<Self>>
     + ops::Add<V<Self>>
     + ops::Sub<V<Self>>
     + ops::Sub<Self, Output = V<Self>>
-where
-    Self: Sized,
-    <Self as ops::Index<usize>>::Output: Real + NumAssign,
 {
     unsafe fn uninitialized_values() -> Self;
 
     fn null() -> Self {
-        Self::constant(<O<Self> as Zero>::zero())
+        Self::constant(<E<Self> as Zero>::zero())
     }
 
-    fn from_slice(s: &[O<Self>]) -> Self {
+    fn from_slice(s: &[E<Self>]) -> Self {
         let mut v = Self::null();
         assert!(s.len() == Self::ambient_dimension());
         for i in Self::ambient_dimensions() {
@@ -37,7 +32,7 @@ where
         }
         v
     }
-    fn constant(c: O<Self>) -> Self {
+    fn constant(c: E<Self>) -> Self {
         let mut v = unsafe { Self::uninitialized_values() };
         for i in Self::ambient_dimensions() {
             v[i] = c;

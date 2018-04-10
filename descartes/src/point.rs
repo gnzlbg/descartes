@@ -2,7 +2,7 @@
 
 use descartes_traits::dimension;
 use generic_array::{ArrayLength, GenericArray};
-use num_traits::{NumAssign, real::Real};
+use num_traits::{real::Real, NumAssign};
 
 #[derive(Copy, Clone, Default)]
 pub struct P<E, A, D>
@@ -62,24 +62,24 @@ where
 }
 
 impl<E, A, D> ::descartes_traits::associated::Vector<E> for P<E, A, D>
-    where
+where
     E: Real + NumAssign + Default,
     A: ArrayLength<E> + Copy + Default,
-GenericArray<E, A>: Copy + Default,
+    GenericArray<E, A>: Copy + Default,
     D: Copy + Default,
 {
     type Vector = super::V<E, A>;
 }
 
-impl<E, A, D> ::ops::Add<super::V<E,A>> for P<E, A, D>
-    where
+impl<E, A, D> ::ops::Add<super::V<E, A>> for P<E, A, D>
+where
     E: Real + NumAssign + Default,
     A: ArrayLength<E> + Copy + Default,
-GenericArray<E, A>: Copy + Default,
+    GenericArray<E, A>: Copy + Default,
     D: Copy + Default,
 {
     type Output = Self;
-    fn add(mut self, o: super::V<E,A>) -> Self::Output {
+    fn add(mut self, o: super::V<E, A>) -> Self::Output {
         use descartes_traits::dimension::Ambient;
         for i in Self::ambient_dimensions() {
             self[i] += o[i];
@@ -88,15 +88,15 @@ GenericArray<E, A>: Copy + Default,
     }
 }
 
-impl<E, A, D> ::ops::Sub<super::V<E,A>> for P<E, A, D>
-    where
+impl<E, A, D> ::ops::Sub<super::V<E, A>> for P<E, A, D>
+where
     E: Real + NumAssign + Default,
     A: ArrayLength<E> + Copy + Default,
-GenericArray<E, A>: Copy + Default,
+    GenericArray<E, A>: Copy + Default,
     D: Copy + Default,
 {
     type Output = Self;
-    fn sub(mut self, o: super::V<E,A>) -> Self::Output {
+    fn sub(mut self, o: super::V<E, A>) -> Self::Output {
         use descartes_traits::dimension::Ambient;
         for i in Self::ambient_dimensions() {
             self[i] -= o[i];
@@ -106,16 +106,16 @@ GenericArray<E, A>: Copy + Default,
 }
 
 impl<E, A, D> ::ops::Sub for P<E, A, D>
-    where
+where
     E: Real + NumAssign + Default,
     A: ArrayLength<E> + Copy + Default,
-GenericArray<E, A>: Copy + Default,
+    GenericArray<E, A>: Copy + Default,
     D: Copy + Default,
 {
-    type Output = super::V<E,A>;
+    type Output = super::V<E, A>;
     fn sub(self, o: Self) -> Self::Output {
-        use descartes_traits::Vector;
         use descartes_traits::dimension::Ambient;
+        use descartes_traits::Vector;
         let mut v = Self::Output::null();
         for i in Self::ambient_dimensions() {
             v[i] = self[i] - o[i];
@@ -123,7 +123,6 @@ GenericArray<E, A>: Copy + Default,
         v
     }
 }
-
 
 impl<E, A, D> ::descartes_traits::Point for P<E, A, D>
 where
@@ -142,8 +141,8 @@ where
 
 #[cfg(test)]
 mod tests {
-    use ::{P, V, EmptyData};
     use typenum::{U1, U2, U3};
+    use {EmptyData, P, V};
     type P1D = P<f32, U1, EmptyData>;
     type V1D = V<f32, U1>;
     type P2D = P<f32, U2, EmptyData>;
@@ -153,8 +152,9 @@ mod tests {
 
     #[test]
     fn point() {
-        use descartes_traits::{Vector, Point};
-        {  // 1D:
+        use descartes_traits::{Point, Vector};
+        {
+            // 1D:
             let ad = 1;
             let x = P1D::constant(1.);
             let y = V1D::constant(2.);
@@ -172,7 +172,8 @@ mod tests {
             }
         }
 
-        {  // 2D:
+        {
+            // 2D:
             let ad = 2;
             let x = P2D::constant(1.);
             let y = V2D::constant(2.);
@@ -188,10 +189,10 @@ mod tests {
             for i in 0..ad {
                 assert_eq!(z[i], 0.);
             }
-
         }
 
-        {  // 3D:
+        {
+            // 3D:
             let ad = 3;
             let x = P3D::constant(1.);
             let y = V3D::constant(2.);
@@ -207,7 +208,6 @@ mod tests {
             for i in 0..ad {
                 assert_eq!(z[i], 0.);
             }
-
         }
     }
 }

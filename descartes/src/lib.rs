@@ -13,5 +13,8 @@ pub use vector::V;
 mod point;
 pub use point::P;
 
-#[derive(Copy,Clone,Default)]
+mod line;
+pub use line::L;
+
+#[derive(Copy, Clone, Default)]
 pub struct EmptyData();

@@ -2,7 +2,7 @@
 
 use descartes_traits::{dimension, Vector};
 use generic_array::{ArrayLength, GenericArray};
-use num_traits::{NumAssign, real::Real};
+use num_traits::{real::Real, NumAssign};
 use typenum::U1;
 
 #[derive(Copy, Clone, Default)]

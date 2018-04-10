@@ -1,6 +1,6 @@
 //! Tolerance
 
-use num_traits::{NumAssign, real::Real};
+use num_traits::{real::Real, NumAssign};
 
 /// Tolerance.
 pub trait Tolerance {

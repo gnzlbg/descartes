@@ -14,11 +14,25 @@ pub use vector::Vector;
 mod point;
 pub use point::Point;
 
-pub mod associated {
-    use ::ops;
-    use num_traits::{real::Real, NumAssign};
+mod line;
+pub use line::Line;
 
-    pub trait Vector<E: Real + NumAssign> {
-        type Vector: super::Vector + ops::Index<usize, Output = E>;
+pub mod associated {
+    use num_traits::{real::Real, NumAssign};
+    use ops;
+
+    pub trait Number {
+        type Number: Real + NumAssign;
+    }
+    type E<T> = <T as Number>::Number;
+
+    pub trait Vector: Number {
+        type Vector: super::Vector<Number = E<Self>>;
+    }
+    type V<T> = <T as Vector>::Vector;
+
+
+    pub trait Point: Vector {
+        type Point: super::Point<Number = E<Self>, Vector = V<Self>>;
     }
 }
