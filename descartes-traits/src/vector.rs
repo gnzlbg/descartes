@@ -7,27 +7,28 @@ use typenum::{U1, U2, U3};
 
 type E<T> = <T as ::associated::Number>::Number;
 
-pub trait Vector:
+pub trait Vector<N>:
     Copy
     + Clone
     + ::dimension::Ambient
     + ::dimension::Object<OD = U1>
-    + ::associated::Number
-    + ops::Index<usize, Output = E<Self>>
+    + ::associated::Number<Number = N>
+    + ops::Index<usize, Output = N>
     + ops::IndexMut<usize>
     + ops::Add<Self, Output = Self>
     + ops::Sub<Self, Output = Self>
     + ops::AddAssign<Self>
     + ops::SubAssign
-    + ops::AddAssign<E<Self>>
-    + ops::SubAssign<E<Self>>
-    + ops::MulAssign<E<Self>>
-    + ops::DivAssign<E<Self>>
-    + ops::Add<E<Self>, Output = Self>
-    + ops::Sub<E<Self>, Output = Self>
-    + ops::Mul<E<Self>, Output = Self>
-    + ops::Div<E<Self>, Output = Self>
+    + ops::AddAssign<N>
+    + ops::SubAssign<N>
+    + ops::MulAssign<N>
+    + ops::DivAssign<N>
+    + ops::Add<N, Output = Self>
+    + ops::Sub<N, Output = Self>
+    + ops::Mul<N, Output = Self>
+    + ops::Div<N, Output = Self>
     + ops::Neg<Output = Self>
+    where N: Real + NumAssign
 {
     unsafe fn uninitialized_values() -> Self;
 

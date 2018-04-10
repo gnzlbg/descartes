@@ -25,14 +25,12 @@ pub trait Line:
     fn project(&self, p: P<Self>) -> P<Self> {
         use vector::Vector;
         use point::Point;
+        use ops::Add;
         let a = self.origin();
         let ab = self.direction();
-        //a + ab * ((p - a).dot(ab) / ab.dot(ab))
-        //ab.dot(ab) * ab
-        a + ab
+        a + ab * ((p - a).dot(ab) / ab.dot(ab))
     }
 
     fn parameter<T>(&self, p: P<Self>, tol: T) -> Option<E<Self>>
-    where
-        T: Tolerance<N = E<Self>>;
+    where T: Tolerance<N = E<Self>>;
 }

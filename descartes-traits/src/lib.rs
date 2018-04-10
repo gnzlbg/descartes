@@ -27,12 +27,11 @@ pub mod associated {
     type E<T> = <T as Number>::Number;
 
     pub trait Vector: Number {
-        type Vector: super::Vector<Number = E<Self>>;
+        type Vector: super::Vector<E<Self>, Number = E<Self>>;
     }
     type V<T> = <T as Vector>::Vector;
 
-
     pub trait Point: Vector {
-        type Point: super::Point<Number = E<Self>, Vector = V<Self>>;
+        type Point: super::Point<V<Self>, Number = E<Self>, Vector = V<Self>>;
     }
 }

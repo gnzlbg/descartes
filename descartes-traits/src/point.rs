@@ -6,17 +6,18 @@ use ops;
 type E<T> = <T as ::associated::Number>::Number;
 type V<T> = <T as ::associated::Vector>::Vector;
 
-pub trait Point:
+pub trait Point<V>:
     Copy
     + Clone
     + ::dimension::Ambient
     + ::dimension::Object<OD = <Self as ::dimension::Ambient>::AD>
-    + ::associated::Vector
+    + ::associated::Vector<Vector = V>
     + ops::Index<usize, Output = E<Self>>
     + ops::IndexMut<usize>
-    + ops::Add<V<Self>>
-    + ops::Sub<V<Self>>
-    + ops::Sub<Self, Output = V<Self>>
+    + ops::Add<V, Output=Self>
+    + ops::Sub<V, Output=Self>
+    + ops::Sub<Self, Output = V>
+    where V: super::Vector<E<Self>, Number=E<Self>>
 {
     unsafe fn uninitialized_values() -> Self;
 
